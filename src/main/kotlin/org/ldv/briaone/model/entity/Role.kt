@@ -5,13 +5,21 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import java.time.LocalDateTime
+import jakarta.persistence.*
 
 @Entity
-class Role (
+@Table(name = "role")
+class Role(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     var id: Long? = null,
+
+    var nom: String,
+
+    var description: String? = null,
+
+    @OneToMany(mappedBy = "role")
+    var utilisateurs: MutableList<Utilisateur> = mutableListOf()
 ){
 }

@@ -1,13 +1,13 @@
 package org.ldv.briaone.config
 
 import org.ldv.briaone.model.dao.*
-import org.ldv.briaone.model.entity.ModeleIA
+import org.ldv.briaone.model.entity.*
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.*
 
 @Configuration
 class DataInitializer(
-    private val fournisseurIADAO: FournisseurIADAO,
+    private val FournisseurIADAO: FournisseurIADAO,
     private val modeleIADAO: ModeleIADAO
 ) {
 
@@ -15,19 +15,19 @@ class DataInitializer(
     fun initData() = CommandLineRunner {
 
         // Vérifier si le fournisseur Mistral existe déjà
-        val mistral = fournisseurIADAO.findAll()
+        val mistral = FournisseurIADAO.findAll()
             .firstOrNull { it.nom == "Mistral" }
-            ?: fournisseurIADAO.save(
-                fournisseurIA(
+            ?: FournisseurIADAO.save(
+                FournisseurIA(
                     nom = "Mistral",
                     cheminLogo = "/images/mistral.png",
                     description = "Fournisseur français de modèles d'intelligence artificielle."
                 )
             )
-        val gemini = fournisseurIADAO.findAll()
+        val gemini = FournisseurIADAO.findAll()
             .firstOrNull { it.nom == "Gemini" }
-            ?: fournisseurIADAO.save(
-                fournisseurIA(
+            ?: FournisseurIADAO.save(
+                FournisseurIA(
                     nom = "Gemini",
                     cheminLogo = "/images/gemini.png",
                     description = "Modèles d'intelligence artificielle de Google."
@@ -38,33 +38,37 @@ class DataInitializer(
         val modeles = listOf(
             ModeleIA(
                 nom = "gemini-3.8-flash",
+                identifiantTechnique = "gemini-3.8-flash",
                 urlAPI = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
                 description = "Modèle rapide et polyvalent.",
                 cheminLogo = "/images/gemini.png",
-                fournisseurIA = gemini
+                fournisseur = gemini
             ),
 
             ModeleIA(
                 nom = "gemini-3.5-flash-lite",
+                identifiantTechnique = "gemini-3.8-flash",
                 urlAPI = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
                 description = "Modèle rapide pour les tâches simples.",
                 cheminLogo = "/images/gemini.png",
-                fournisseurIA = gemini
+                fournisseur = gemini
             ),
             ModeleIA(
                 nom = "mistral-small-latest",
+                identifiantTechnique = "mistral-small-latest",
                 urlAPI = "https://api.mistral.ai/v1/chat/completions",
                 description = "Modèle léger pour les conversations et les tâches courantes.",
                 cheminLogo = "/images/mistral.png",
-                fournisseurIA = mistral
+                fournisseur = mistral
             ),
 
             ModeleIA(
                 nom = "mistral-medium-latest",
+                identifiantTechnique = "mistral-small-latest",
                 urlAPI = "https://api.mistral.ai/v1/chat/completions",
                 description = "Modèle plus avancé pour les tâches complexes.",
                 cheminLogo = "/images/mistral.png",
-                fournisseurIA = mistral
+                fournisseur = mistral
             )
         )
 

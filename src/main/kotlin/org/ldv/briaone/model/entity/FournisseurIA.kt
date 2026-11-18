@@ -5,13 +5,23 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import java.time.LocalDateTime
+import jakarta.persistence.*
 
 @Entity
-class FournisseurIA (
+@Table(name = "fournisseuria")
+class FournisseurIA(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     var id: Long? = null,
+
+    var nom: String,
+
+    var description: String? = null,
+
+    var cheminLogo: String? = null,
+
+    @OneToMany(mappedBy = "fournisseur")
+    var modeles: MutableList<ModeleIA> = mutableListOf()
 ){
 }

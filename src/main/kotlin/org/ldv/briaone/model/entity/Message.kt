@@ -5,14 +5,30 @@ import jakarta.persistence.Entity
 import java.time.LocalDateTime
 
 @Entity
-class Message (
+@Table(name = "message")
+class Message(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     var id: Long? = null,
+
     @Column(columnDefinition = "TEXT", nullable = false)
     var contenu: String,
-    var dateCreation: LocalDateTime,
+
+    var dateCreation: LocalDateTime = LocalDateTime.now(),
+
+    @Enumerated(EnumType.STRING)
     var typeMessage: TypeMessage,
+
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    var conversation: Conversation,
+
+    @OneToMany(
+        mappedBy = "message",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    var fichiers: MutableList<Fichier> = mutableListOf()
 ){
 }

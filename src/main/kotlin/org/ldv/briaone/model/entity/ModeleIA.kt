@@ -5,13 +5,33 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import java.time.LocalDateTime
+import jakarta.persistence.*
 
 @Entity
-class ModeleIA (
+@Table(name = "modeleia")
+class ModeleIA(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     var id: Long? = null,
+
+    var nom: String,
+
+    @Column(unique = true)
+    var identifiantTechnique: String,
+
+    var urlAPI: String? = null,
+
+    @Column(columnDefinition = "TEXT")
+    var description: String? = null,
+
+    var cheminLogo: String? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    var fournisseur: FournisseurIA? = null,
+
+    @OneToMany(mappedBy = "modeleIA")
+    var conversations: MutableList<Conversation> = mutableListOf()
 ){
 }

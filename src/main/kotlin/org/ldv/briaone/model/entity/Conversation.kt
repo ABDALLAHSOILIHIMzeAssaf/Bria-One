@@ -1,18 +1,41 @@
 package org.ldv.briaone.model.entity
 
-import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-class Conversation (
+@Table(name = "conversation")
+class Conversation(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     var id: Long? = null,
 
+    var titre: String,
+
+    var dateCreation: LocalDateTime = LocalDateTime.now(),
+
+    var dateModification: LocalDateTime = LocalDateTime.now(),
+
+    var estArchivee: Boolean = false,
+
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    var utilisateur: Utilisateur,
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    var modeleIA: ModeleIA? = null,
+
+    @OneToMany(
+        mappedBy = "conversation",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    var messages: MutableList<Message> = mutableListOf()
 ){
 }
