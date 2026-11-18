@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Inscription | Bria’One</title>
+    <link rel="stylesheet" href="/css/briaone.css">
 </head>
-<body>
-
+<body class="auth-page">
+<header class="auth-header"><a class="brand" href="/"><img src="/img/BriaOne_logo.png" alt="Bria’One"
+                                                           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span
+        class="brand-fallback">Br<span>ia</span>’One</span></a><a href="/auth/connexion"
+                                                                  class="signup-link">Connexion</a></header>
+<main class="auth-content">
+    <div class="auth-illustration"><!-- Illustration inscription à ajouter ultérieurement --></div>
+    <form class="login-card signup-card" th:action="@{/inscription}" action="/inscription" method="post">
+        <div class="user-symbol"><i class="bi bi-person"></i></div>
+        <h2>Demande d’inscription</h2><input name="nom" type="text" placeholder="Nom et prénom ..." required><input
+            name="email" type="email" placeholder="Adresse e-mail ..." required><input name="identifiant" type="text"
+                                                                                       placeholder="Identifiant souhaité ..."
+                                                                                       required><input name="password"
+                                                                                                       type="password"
+                                                                                                       placeholder="Mot de passe ..."
+                                                                                                       required>
+        <button class="gradient-button" type="submit">Envoyer la demande</button>
+    </form>
+</main>
 </body>
 </html>

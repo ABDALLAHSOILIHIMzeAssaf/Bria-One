@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Connexion | Bria’One</title>
+    <link rel="stylesheet" href="/css/briaone.css">
 </head>
-<body>
-
+<body class="auth-page">
+<header class="auth-header"><a class="brand" href="/"><img src="/img/BriaOne_logo.png" alt="Bria’One"
+                                                           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span
+        class="brand-fallback">Br<span>ia</span>’One</span></a><a href="/auth/inscription" class="signup-link">S’inscription</a>
+</header>
+<main class="auth-content">
+    <div class="auth-illustration"><!-- Illustration connexion à ajouter ultérieurement --></div>
+    <form class="login-card" th:action="@{/login}" action="/login" method="post">
+        <div class="user-symbol"><i class="bi bi-person"></i></div>
+        <input name="username" type="text" placeholder="Votre identifiant ..." required><input name="password"
+                                                                                               type="password"
+                                                                                               placeholder="Mot de passe ..."
+                                                                                               required><a
+            class="request-link" href="/auth/inscription">Demande d’inscription</a>
+        <button class="gradient-button" type="submit">Se connecter</button>
+        <p class="error" th:if="${param.error}">Identifiant ou mot de passe incorrect.</p></form>
+</main>
 </body>
 </html>

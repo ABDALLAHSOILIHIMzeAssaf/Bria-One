@@ -1,5 +1,22 @@
-<div xmlns:th="http://www.thymeleaf.org">
-    <nav th:fragment="navbar(activePage)" class="navbar navbar-expand-lg p-0">
-
-    </nav>
-</div>
+<nav class="sidebar" th:fragment="navbar">
+    <div class="nav-links" th:if="${isAdmin == null or isAdmin}">
+        <a class="nav-item" th:classappend="${activePage == 'models' ? ' selected' : ''}" th:href="@{/admin/modeles}"
+           href="/admin/modeles"><span>🤖</span>Modèles IA</a>
+        <a class="nav-item" th:classappend="${activePage == 'users' ? ' selected' : ''}"
+           th:href="@{/admin/utilisateurs}" href="/admin/utilisateurs"><span>👥</span>Utilisateurs</a>
+        <a class="nav-item" th:classappend="${activePage == 'chat' ? ' selected' : ''}" th:href="@{/accueil}"
+           href="/accueil"><span>🏠</span>Interface principale</a>
+    </div>
+    <div class="nav-links" th:unless="${isAdmin == null or isAdmin}">
+        <a class="nav-item" th:href="@{/accueil}" href="/accueil"><span>📝</span>Nouvelle conversation</a>
+        <a class="nav-item" th:href="@{/utilisateur/archives}" href="/utilisateur/archives"><span>🗂️</span>Archive des
+            conversations</a>
+        <a class="nav-item" th:href="@{/utilisateur/historique}" href="/utilisateur/historique"><span>◴</span>Historique
+            des conversations</a>
+    </div>
+    <div class="sidebar-bottom">
+        <a class="nav-item" th:href="@{/parametres}" href="/parametres"><span>⚙</span>Paramètres <i
+                class="bi bi-chevron-down"></i></a>
+        <a class="nav-item logout" th:href="@{/logout}" href="/logout"><span>↪</span>Déconnexion</a>
+    </div>
+</nav>
