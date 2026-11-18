@@ -12,6 +12,7 @@ import java.time.LocalDateTime
 class Conversation(
 
     @Id
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
@@ -24,11 +25,11 @@ class Conversation(
     var estArchivee: Boolean = false,
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "utilisateur_id", nullable = false)
     var utilisateur: Utilisateur,
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "modele_id")
     var modeleIA: ModeleIA? = null,
 
     @OneToMany(

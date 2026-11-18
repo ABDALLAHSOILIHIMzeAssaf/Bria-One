@@ -11,6 +11,7 @@ import jakarta.persistence.*
 class Fichier(
 
     @Id
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
@@ -21,7 +22,7 @@ class Fichier(
     var chemin: String,
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "message_id", nullable = false)
     var message: Message
 ){
 }

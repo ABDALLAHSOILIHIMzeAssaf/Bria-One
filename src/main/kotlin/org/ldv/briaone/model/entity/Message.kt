@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 class Message(
 
     @Id
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
@@ -21,7 +22,7 @@ class Message(
     var typeMessage: TypeMessage,
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "conversation_id", nullable = false)
     var conversation: Conversation,
 
     @OneToMany(

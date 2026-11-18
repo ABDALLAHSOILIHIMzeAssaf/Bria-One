@@ -47,7 +47,7 @@ class DataInitializer(
 
             ModeleIA(
                 nom = "gemini-3.5-flash-lite",
-                identifiantTechnique = "gemini-3.8-flash",
+                identifiantTechnique = "gemini-3.5-flash",
                 urlAPI = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
                 description = "Modèle rapide pour les tâches simples.",
                 cheminLogo = "/images/gemini.png",
@@ -64,7 +64,7 @@ class DataInitializer(
 
             ModeleIA(
                 nom = "mistral-medium-latest",
-                identifiantTechnique = "mistral-small-latest",
+                identifiantTechnique = "mistral-medium-latest",
                 urlAPI = "https://api.mistral.ai/v1/chat/completions",
                 description = "Modèle plus avancé pour les tâches complexes.",
                 cheminLogo = "/images/mistral.png",

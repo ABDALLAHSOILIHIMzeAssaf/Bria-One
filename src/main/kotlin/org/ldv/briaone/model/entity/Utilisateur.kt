@@ -12,6 +12,7 @@ import jakarta.persistence.*
 class Utilisateur(
 
     @Id
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
@@ -22,7 +23,7 @@ class Utilisateur(
     var motDePasse: String,
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "role_id")
     var role: Role? = null,
 
     @OneToMany(mappedBy = "utilisateur")

@@ -12,6 +12,7 @@ import jakarta.persistence.*
 class ModeleIA(
 
     @Id
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
@@ -28,7 +29,7 @@ class ModeleIA(
     var cheminLogo: String? = null,
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "fournisseur_id")
     var fournisseur: FournisseurIA? = null,
 
     @OneToMany(mappedBy = "modeleIA")
