@@ -20,12 +20,12 @@
         </div>
         <div class="model-list">
             <article class="model-card" th:each="modele : ${modeles}">
-                <div class="model-logo" th:text="${modele.logo != null ? modele.logo : '✨'}">✨</div>
+                <div class="model-logo" th:text="${modele.cheminLogo != null ? modele.cheminLogo : '✨'}">✨</div>
                 <h2 th:text="${modele.nom}">Gemini 1.5 Flash</h2>
                 <p th:text="${modele.description}">Description du modèle IA</p>
                 <div class="card-actions">
                     <button class="blue-button"
-                            th:attr="data-id=${modele.id},data-name=${modele.nom},data-url=${modele.url},data-description=${modele.description}"
+                            th:attr="data-id=${modele.id},data-name=${modele.nom},data-url=${modele.urlAPI},data-description=${modele.description}"
                             onclick="editModelFromButton(this)">
                         Modifier
                     </button>
