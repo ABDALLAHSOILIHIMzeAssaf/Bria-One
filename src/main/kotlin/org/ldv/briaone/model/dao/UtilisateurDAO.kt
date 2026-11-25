@@ -1,4 +1,7 @@
 package org.ldv.briaone.model.dao
 
-class UtilisateurDAO {
+import org.ldv.briaone.model.entity.Utilisateur
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface UtilisateurDAO : JpaRepository<Utilisateur, Long> {
 }

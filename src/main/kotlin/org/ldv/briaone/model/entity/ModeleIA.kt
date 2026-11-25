@@ -35,4 +35,5 @@ class ModeleIA(
     @OneToMany(mappedBy = "modeleIA")
     var conversations: MutableList<Conversation> = mutableListOf()
 ){
+
 }
