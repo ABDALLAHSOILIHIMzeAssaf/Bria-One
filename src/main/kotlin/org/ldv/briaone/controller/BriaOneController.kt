@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDateTime
+import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
 class BriaOneController(
@@ -108,4 +109,78 @@ class BriaOneController(
 
         return "redirect:/conversations/${conversationEnregistree.id}"
     }
+
+    // Affichage d'une conversation
+    @GetMapping("/conversations/{id}")
+    fun afficherConversation(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+
+        val conversation = conversationDAO.findById(id)
+            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+
+        model.addAttribute(
+            "conversations",
+            conversationDAO.findAllByOrderByDateModificationDesc()
+        )
+
+        model.addAttribute("conversation", conversation)
+        model.addAttribute(
+            "messages",
+            conversation.messages.sortedBy { it.dateCreation }
+        )
+
+        return "accueil"
+    }
+
+    // Envoi d'un nouveau message dans une conversation existante
+    @PostMapping("/conversations/{id}/messages")
+    fun envoyerMessage(
+        @PathVariable id: Long,
+        @RequestParam prompt: String
+    ): String {
+
+        val conversation = conversationDAO.findById(id)
+            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+
+        // Enregistrement du message utilisateur
+        val messageUtilisateur = Message(
+            contenu = prompt,
+            dateCreation = LocalDateTime.now(),
+            typeMessage = TypeMessage.UTILISATEUR,
+            conversation = conversation
+        )
+
+        messageDAO.save(messageUtilisateur)
+
+        try {
+            val modele = conversation.modeleIA!!
+            // Sélection automatique du service
+            val iaService = iaServiceFactory.getService(modele)
+
+            // Appel du fournisseur correspondant
+            val reponse = iaService.envoyerPrompt(prompt, modele)
+
+
+            val messageAssistant = Message(
+                contenu = reponse,
+                dateCreation = LocalDateTime.now(),
+                typeMessage = TypeMessage.ASSISTANT,
+                conversation = conversation
+            )
+
+            messageDAO.save(messageAssistant)
+
+        } catch (e: Exception) {
+            println("Erreur lors de l'appel à ${conversation.modeleIA!!.nom} : ${e.message}")
+        }
+
+        conversation.dateModification = LocalDateTime.now()
+        conversationDAO.save(conversation)
+
+        return "redirect:/conversations/$id"
+    }
+
+
 }

@@ -2,40 +2,70 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Accueil | Bria’One</title>
-  <link rel="stylesheet" href="/css/briaone.css">
-  <link rel="icon" type="image/png" href="../../static/img/BriaOne_logo.png">
-  <link rel="stylesheet" href="/vendor/bootstrap-icons-1.13.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" th:href="@{/css/briaone.css}" href="/css/briaone.css">
+  <link rel="icon" type="image/png" th:href="@{/img/BriaOne_logo.png}" href="/img/BriaOne_logo.png">
+  <link rel="stylesheet" th:href="@{/vendor/bootstrap-icons-1.13.2/font/bootstrap-icons.css}" href="/vendor/bootstrap-icons-1.13.2/font/bootstrap-icons.css">
 </head>
 <body>
+
 <header th:replace="~{fragments/header :: header}"></header>
+
 <div class="app-shell">
   <aside th:replace="~{fragments/navbar :: navbar}"></aside>
+
   <main class="main-panel chat-main">
-    <section class="welcome-card"><h1>Bienvenue sur Bria’One !</h1>
+
+    <!-- 1. Écran d'accueil : affiché uniquement si aucune conversation n'est sélectionnée -->
+    <section class="welcome-card" th:if="${conversation == null}">
+      <h1>Bienvenue sur Bria’One !</h1>
       <p>Vous pouvez dès maintenant échanger avec différents modèles<br class="desktop"> d'intelligence
         artificielle, poser vos questions et obtenir de l'aide<br class="desktop"> sur de nombreux sujets.</p>
     </section>
-    <form class="chat-composer" th:action="@{/chat/send}" action="/chat/send" method="post"
-          enctype="multipart/form-data">
-      <div class="model-choice"><label for="model">Modèle</label><select id="model" name="modele">
-        <option th:each="modele : ${modeles}" th:value="${modele.id}" th:text="${modele.nom}">Claude</option>
-        <option th:if="${modeles == null or #lists.isEmpty(modeles)}">Claude</option>
-        <option th:if="${modeles == null or #lists.isEmpty(modeles)}">Mistral</option>
-        <option th:if="${modeles == null or #lists.isEmpty(modeles)}">Gemini</option>
-      </select></div>
-      <label class="attach-btn" title="Ajouter une pièce jointe"><ion-icon name="download-outline"></ion-icon><input type="file"
-                                                                                                     name="fichier"
-                                                                                                     hidden>
+
+    <!-- 2. Zone des messages : affichée lorsqu'une conversation existe -->
+    <section class="chat-messages flex-grow-1 overflow-auto p-4" th:if="${conversation != null}">
+      <div th:each="message : ${messages}" class="mb-4">
+        <strong th:text="${message.typeMessage}">UTILISATEUR</strong>
+        <div class="message mt-2 message-content" th:text="${message.contenu}">
+          Contenu du message
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Formulaire d'envoi connecté à BriaOneController (@PostMapping("/conversations")) -->
+    <form class="chat-composer" th:action="@{/conversations}" method="post" enctype="multipart/form-data">
+      <div class="model-choice">
+        <label for="model">Modèle</label>
+        <select id="model" name="idModele" required>
+          <option th:each="modele : ${modeles}"
+                  th:value="${modele.id}"
+                  th:text="${modele.nom}"
+                  th:selected="${conversation != null and conversation.modeleIA != null and conversation.modeleIA.id == modele.id}">
+            Mistral
+          </option>
+          <!-- Valeurs de secours si la base de données est vide -->
+          <option th:if="${modeles == null or #lists.isEmpty(modeles)}" value="" disabled selected>Aucun modèle disponible</option>
+        </select>
+      </div>
+
+      <label class="attach-btn" title="Ajouter une pièce jointe">
+        <ion-icon name="download-outline"></ion-icon>
+        <input type="file" name="fichier" hidden>
       </label>
-      <textarea name="message" placeholder="Saisir votre message ......">
-      </textarea>
-      <button class="send-btn" type="submit" aria-label="Envoyer"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+
+      <textarea name="prompt" placeholder="Saisir votre message ......" required></textarea>
+
+      <button class="send-btn" type="submit" aria-label="Envoyer">
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </button>
     </form>
+
   </main>
 </div>
-<script src="/js/briaone.js"></script>
+
+<script th:src="@{/js/briaone.js}" src="/js/briaone.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.js"></script>
 </body>
