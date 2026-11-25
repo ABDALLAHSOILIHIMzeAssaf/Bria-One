@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,39 +34,81 @@
       </div>
     </section>
 
-    <!-- 3. Formulaire d'envoi connecté à BriaOneController (@PostMapping("/conversations")) -->
-    <form class="chat-composer" th:action="@{/conversations}" method="post" enctype="multipart/form-data">
-      <div class="model-choice">
-        <label for="model">Modèle</label>
-        <select id="model" name="idModele" required>
-          <option th:each="modele : ${modeles}"
-                  th:value="${modele.id}"
-                  th:text="${modele.nom}"
-                  th:selected="${conversation != null and conversation.modeleIA != null and conversation.modeleIA.id == modele.id}">
+    <!-- 3. Zone de saisie -->
+    <div class="border-top p-3">
+
+      <!-- Création d'une conversation (conversation == null) -->
+      <form id="formChat"
+            class="chat-composer"
+            th:if="${conversation == null}"
+            th:action="@{/conversations}"
+            method="post"
+            enctype="multipart/form-data">
+
+        <div class="model-choice model-select-wrapper">
+          <label for="model">Modèle</label>
+          <select id="model" name="idModele" class="form-select model-select" required>
+            <option value="" disabled selected>Choisir un modèle IA</option>
+            <option th:each="modele : ${modeles}"
+                    th:value="${modele.id}"
+                    th:text="${modele.nom}">
+              Mistral
+            </option>
+            <option th:if="${modeles == null or #lists.isEmpty(modeles)}" value="" disabled>
+              Aucun modèle disponible
+            </option>
+          </select>
+        </div>
+
+        <label class="attach-btn" title="Ajouter une pièce jointe">
+          <ion-icon name="download-outline"></ion-icon>
+          <input type="file" name="fichier" hidden>
+        </label>
+
+        <textarea name="prompt" class="form-control" rows="2" placeholder="Posez votre question..." required></textarea>
+
+        <button class="send-btn btn btn-primary" type="submit" aria-label="Envoyer">
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
+      </form>
+
+      <!-- Conversation existante (conversation != null) -->
+      <form class="chat-composer"
+            th:if="${conversation != null}"
+            th:action="@{/conversations/{id}/messages(id=${conversation.id})}"
+            method="post"
+            enctype="multipart/form-data">
+
+        <div class="model-choice model-current d-flex align-items-center gap-2">
+          <img th:if="${conversation.modeleIA != null and conversation.modeleIA.cheminLogo != null}"
+               th:src="@{${conversation.modeleIA.cheminLogo}}"
+               alt="Logo du modèle"
+               width="28"
+               height="28">
+          <span th:text="${conversation.modeleIA != null ? conversation.modeleIA.nom : 'Modèle IA'}">
             Mistral
-          </option>
-          <!-- Valeurs de secours si la base de données est vide -->
-          <option th:if="${modeles == null or #lists.isEmpty(modeles)}" value="" disabled selected>Aucun modèle disponible</option>
-        </select>
-      </div>
+          </span>
+        </div>
 
-      <label class="attach-btn" title="Ajouter une pièce jointe">
-        <ion-icon name="download-outline"></ion-icon>
-        <input type="file" name="fichier" hidden>
-      </label>
+        <label class="attach-btn" title="Ajouter une pièce jointe">
+          <ion-icon name="download-outline"></ion-icon>
+          <input type="file" name="fichier" hidden>
+        </label>
 
-      <textarea name="prompt" placeholder="Saisir votre message ......" required></textarea>
+        <textarea name="prompt" class="form-control" rows="2" placeholder="Écrivez votre message..." required></textarea>
 
-      <button class="send-btn" type="submit" aria-label="Envoyer">
-        <ion-icon name="arrow-forward-outline"></ion-icon>
-      </button>
-    </form>
+        <button class="send-btn btn btn-primary" type="submit" aria-label="Envoyer">
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
+      </form>
+
+    </div>
 
   </main>
 </div>
 
 <script th:src="@{/js/briaone.js}" src="/js/briaone.js"></script>
-<script type="module" src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.js"></script>
+<script type="module" src="https://unpkg.com"></script>
+<script nomodule src="https://unpkg.com"></script>
 </body>
 </html>
