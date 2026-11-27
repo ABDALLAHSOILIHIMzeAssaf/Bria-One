@@ -1,5 +1,6 @@
 package org.ldv.briaone.controller
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication
 import org.ldv.briaone.model.dao.ConversationDAO
 import org.ldv.briaone.model.dao.MessageDAO
 import org.ldv.briaone.model.dao.ModeleIADAO
@@ -44,11 +45,12 @@ class BriaOneController(
     @PostMapping("/conversations")
     fun creerConversation(
         @RequestParam prompt: String,
-        @RequestParam idModele: Long
+        @RequestParam idModele: Long,
+        authentication: Authentication
     ): String {
 
         // Récupération du premier utilisateur en base (pour tester sans erreur de connexion)
-        val utilisateur = utilisateurDAO.findAll().firstOrNull()
+   val utilisateur = utilisateurDAO.findUtilisateurByEmail(authentication.name)
             ?: throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Aucun utilisateur trouvé en base de données"

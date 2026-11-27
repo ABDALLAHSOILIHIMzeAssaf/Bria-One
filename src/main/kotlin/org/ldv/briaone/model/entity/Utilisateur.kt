@@ -12,21 +12,27 @@ import jakarta.persistence.*
 class Utilisateur(
 
     @Id
-    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @Column(unique = true, nullable = false)
-    var email: String,
+    @Column(nullable = false, unique = true)
+    var email: String = "",
+
+    var prenom: String,
+    var nom: String,
+
+    @Column(nullable = false, length = 510)
+    var motDePasse: String = "",
 
     @Column(nullable = false)
-    var motDePasse: String,
+    var actif: Boolean = true,
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    var role: Role? = null,
+    var role: Role,
 
     @OneToMany(mappedBy = "utilisateur")
     var conversations: MutableList<Conversation> = mutableListOf()
 ){
+    
 }

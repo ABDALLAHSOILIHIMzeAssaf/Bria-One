@@ -19,6 +19,8 @@ class Role(
 
     var description: String? = null,
 
+    var nomLogique: String,
+
     @OneToMany(mappedBy = "role")
     var utilisateurs: MutableList<Utilisateur> = mutableListOf()
 ){

@@ -1,4 +1,7 @@
 package org.ldv.briaone.model.dao
 
-class RoleDAO {
+import org.ldv.briaone.model.entity.Role
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface RoleDAO : JpaRepository<Role, Long> {
 }
